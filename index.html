@@ -1,1 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <title>Wackoz Inc</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #000000;
+      color: #111111;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow: hidden;
+      position: relative;
+      touch-action: none;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      pointer-events: none;
+
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.035) 0,
+        rgba(255, 255, 255, 0.035) 1px,
+        rgba(0, 0, 0, 0.08) 1px,
+        rgba(0, 0, 0, 0.08) 4px
+      );
+
+      opacity: 0.72;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 101;
+      pointer-events: none;
+
+      background: rgba(255, 255, 255, 0.008);
+      opacity: 0.12;
+
+      animation: crtFlicker 4.8s steps(1, end) infinite;
+    }
+
+    @keyframes crtFlicker {
+      0% {
+        opacity: 0.10;
+      }
+
+      8% {
+        opacity: 0.13;
+      }
+
+      9% {
+        opacity: 0.08;
+      }
+
+      18% {
+        opacity: 0.11;
+      }
+
+      32% {
+        opacity: 0.09;
+      }
+
+      33% {
+        opacity: 0.14;
+      }
+
+      34% {
+        opacity: 0.10;
+      }
+
+      51% {
+        opacity: 0.12;
+      }
+
+      67% {
+        opacity: 0.09;
+      }
+
+      68% {
+        opacity: 0.13;
+      }
+
+      82% {
+        opacity: 0.10;
+      }
+
+      100% {
+        opacity: 0.11;
+      }
+    }
+
+    .logo-stage {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 450px;
+      perspective-origin: 50% 50%;
+      pointer-events: none;
+    }
+
+    .logo-scene {
+      position: relative;
+      width: min(620px, 94vw, 80vh);
+      aspect-ratio: 1 / 1;
+      transform-style: preserve-3d;
+    }
+
+    .logo-anchor {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: min(567px, 91.4%);
+      aspect-ratio: 1 / 1;
+      transform: translate(-50%, -55%);
+      transform-style: preserve-3d;
+      z-index: 2;
+    }
+
+    .logo-wrap {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    .logo-face,
+    .logo-depth {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      transform-style: preserve-3d;
+      backface-visibility: visible;
+      -webkit-backface-visibility: visible;
+    }
+
+    .logo-face {
+      transform: translateZ(8px);
+
+      filter:
+        drop-shadow(1.5px 0 0 rgba(255, 35, 80, 0.42))
+        drop-shadow(-1.5px 0 0 rgba(0, 210, 255, 0.42));
+    }
+
+    .logo-depth {
+      filter: brightness(0.7);
+    }
+
+    .logo-depth-1 {
+      transform: translateZ(6px);
+    }
+
+    .logo-depth-2 {
+      transform: translateZ(4px);
+    }
+
+    .logo-depth-3 {
+      transform: translateZ(2px);
+    }
+
+    .logo-depth-4 {
+      transform: translateZ(0);
+    }
+
+    .logo-depth-5 {
+      transform: translateZ(-2px);
+    }
+
+    .logo-depth-6 {
+      transform: translateZ(-4px);
+    }
+
+    .logo-depth-7 {
+      transform: translateZ(-6px);
+    }
+
+    .logo-depth-8 {
+      transform: translateZ(-8px);
+    }
+
+    footer {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      padding: 20px 24px;
+      text-align: center;
+      background: #000000;
+      z-index: 10;
+    }
+
+    .footer-text {
+      font-size: 11px;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #777777;
+      font-weight: 500;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      body::after {
+        animation: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="logo-stage">
+    <div class="logo-scene">
+
+      <div class="logo-anchor">
+        <div class="logo-wrap" id="logoWrap">
+
+          <img
+            src="https://wackoz.com/wackylogo.com"
+            alt=""
+            aria-hidden="true"
+            class="logo-depth logo-depth-8"
+          />
+
+          <img
+            src="https://wackoz.com/wackylogo.com"
+            alt=""
+            aria-hidden="true"
+            class="logo-depth logo-depth-7"
+          />
+
+          <img
+            src="https://wackoz.com/wackylogo.com"
+            alt=""
+            aria-hidden="true"
+            class="logo-depth logo-depth-6"
+          />
+
+          <img
+            src="https://wackoz.com/wackylogo.com"
+            alt=""
+            aria-hidden="true"
+            class="logo-depth logo-depth-5"
+          />
+
+          <img
+            src="https://wackoz.com/wackylogo.com"
+            alt=""
+            aria-hidden="true"
+            class="logo-depth logo-depth-4"
+          />
+
+          <img
+            src="https://wackoz.com/wackylogo.com"
+            alt=""
+            aria-hidden="true"
+            class="logo-depth logo-depth-3"
+          />
+
+          <img
+            src="https://wackoz.com/wackylogo.com"
+            alt=""
+            aria-hidden="true"
+            class="logo-depth logo-depth-2"
+          />
+
+          <img
+            src="https://wackoz.com/wackylogo.com"
+            alt=""
+            aria-hidden="true"
+            class="logo-depth logo-depth-1"
+          />
+
+          <img
+            src="https://wackoz.com/wackylogo.com"
+            alt="Wackoz Inc Logo"
+            class="logo-face"
+          />
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <p class="footer-text">
+      WACKOZ INC © <span id="year"></span>. All rights reserved.
+    </p>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+
+    const logoWrap = document.getElementById("logoWrap");
+
+    let currentRotationX = 0;
+    let currentRotationY = 0;
+    let currentRotationZ = 0;
+
+    let targetRotationX = 0;
+    let targetRotationY = 0;
+    let targetRotationZ = 0;
+
+    const maxRotationX = 7;
+    const maxRotationY = 10;
+    const maxRotationZ = 1.5;
+
+    const smoothing = 0.075;
+
+    /*
+      DESKTOP MOUSE CONTROL
+    */
+
+    document.addEventListener("mousemove", (event) => {
+
+      const mouseX =
+        (event.clientX / window.innerWidth) * 2 - 1;
+
+      const mouseY =
+        (event.clientY / window.innerHeight) * 2 - 1;
+
+      targetRotationY =
+        mouseX * maxRotationY;
+
+      targetRotationX =
+        -mouseY * maxRotationX;
+
+      targetRotationZ =
+        mouseX *
+        mouseY *
+        maxRotationZ;
+    });
+
+    document.addEventListener("mouseleave", () => {
+
+      targetRotationX = 0;
+      targetRotationY = 0;
+      targetRotationZ = 0;
+    });
+
+    /*
+      MOBILE TOUCH CONTROL
+
+      Dragging horizontally rotates left/right.
+      Dragging vertically tilts up/down.
+
+      Rotation is still restricted by the
+      exact same maximum boundaries.
+    */
+
+    let isTouching = false;
+
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    let touchStartRotationX = 0;
+    let touchStartRotationY = 0;
+
+    document.addEventListener(
+      "touchstart",
+      (event) => {
+
+        if (event.touches.length !== 1) {
+          return;
+        }
+
+        isTouching = true;
+
+        const touch = event.touches[0];
+
+        touchStartX = touch.clientX;
+        touchStartY = touch.clientY;
+
+        touchStartRotationX = targetRotationX;
+        touchStartRotationY = targetRotationY;
+
+      },
+      {
+        passive: false
+      }
+    );
+
+    document.addEventListener(
+      "touchmove",
+      (event) => {
+
+        if (
+          !isTouching ||
+          event.touches.length !== 1
+        ) {
+          return;
+        }
+
+        event.preventDefault();
+
+        const touch = event.touches[0];
+
+        const deltaX =
+          touch.clientX - touchStartX;
+
+        const deltaY =
+          touch.clientY - touchStartY;
+
+        /*
+          Controls how sensitive finger dragging is.
+          Higher numbers = stronger movement.
+        */
+
+        const touchSensitivity = 0.07;
+
+        targetRotationY =
+          touchStartRotationY +
+          deltaX * touchSensitivity;
+
+        targetRotationX =
+          touchStartRotationX -
+          deltaY * touchSensitivity;
+
+        /*
+          Keep rotation inside the subtle boundaries.
+        */
+
+        targetRotationY = Math.max(
+          -maxRotationY,
+          Math.min(
+            maxRotationY,
+            targetRotationY
+          )
+        );
+
+        targetRotationX = Math.max(
+          -maxRotationX,
+          Math.min(
+            maxRotationX,
+            targetRotationX
+          )
+        );
+
+        /*
+          Slight natural roll based on
+          the current combined rotation.
+        */
+
+        targetRotationZ =
+          (targetRotationY / maxRotationY) *
+          (targetRotationX / maxRotationX) *
+          maxRotationZ;
+
+      },
+      {
+        passive: false
+      }
+    );
+
+    document.addEventListener(
+      "touchend",
+      () => {
+
+        isTouching = false;
+
+        /*
+          Keep the logo where the user left it.
+
+          It will continue subtly floating
+          instead of snapping back immediately.
+        */
+
+      },
+      {
+        passive: true
+      }
+    );
+
+    document.addEventListener(
+      "touchcancel",
+      () => {
+
+        isTouching = false;
+
+      },
+      {
+        passive: true
+      }
+    );
+
+    /*
+      MAIN ANIMATION
+    */
+
+    function animate(time) {
+
+      currentRotationX +=
+        (targetRotationX - currentRotationX) *
+        smoothing;
+
+      currentRotationY +=
+        (targetRotationY - currentRotationY) *
+        smoothing;
+
+      currentRotationZ +=
+        (targetRotationZ - currentRotationZ) *
+        smoothing;
+
+      /*
+        Very subtle passive floating movement.
+        No automatic rotation.
+      */
+
+      const floatY =
+        Math.sin(time * 0.0011) * 3;
+
+      const floatX =
+        Math.sin(time * 0.00073) * 1;
+
+      const floatZ =
+        Math.sin(time * 0.00087) * 2;
+
+      logoWrap.style.transform = `
+        translate3d(
+          ${floatX}px,
+          ${floatY}px,
+          ${floatZ}px
+        )
+        rotateX(${currentRotationX}deg)
+        rotateY(${currentRotationY}deg)
+        rotateZ(${currentRotationZ}deg)
+      `;
+
+      requestAnimationFrame(animate);
+    }
+
+    requestAnimationFrame(animate);
+  </script>
+
+</body>
+</html>
